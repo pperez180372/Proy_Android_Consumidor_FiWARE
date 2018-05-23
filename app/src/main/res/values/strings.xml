@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">Consumidor FiWARE</string>
+    <string name="action_settings">Settings</string>
+    <string name="Titulo_Dipositivo_Local">Dispositivo:</string>
+    <string name="Titulo_Dipositivo_User_Name">Nombre Usuario:</string>
+    <string name="Titulo_Dipositivo_Local_Name">Atributo:</string>
+    <string name="Titulo_Dipositivo_Local_Name_Command">Comando:</string>
+    <string name="Titulo_Dipositivo_Local_Password">Clave:</string>
+    <string name="Titulo_Dipositivo_Remoto">Dispositivo Remoto:</string>
+    <string name="Titulo_Recurso_Remoto">Recurso Remoto:</string>
+    <string name="Titulo_Project_Name">Subservicio:</string>
+    <string name="Titulo_Temperature_Attribute">Valor:</string>
+    <string name="Titulo_Temperature_Subscription_ID">Ident. Subscripción:</string>
+    <string name="Titulo_Potenciometro">Valor Potenciometro:</string>
+    <string name="Titulo_Estado">Estado:</string>
+    <string name="Titulo_Dominio_Name">Dominio:</string>
+    <string name="Titulo_User_Token">Token:</string>
+    <string name="Titulo_Dipositivo_Local_Name_Command_Info">Información:</string>
+    <string name="Titulo_Dipositivo_Local_Name_Command_Result">Resultado:</string>
+
+</resources>
