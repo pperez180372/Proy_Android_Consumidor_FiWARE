@@ -356,9 +356,9 @@ public class MainActivity extends FragmentActivity {
 
             pos = 0;
             String username = (String) urls[0];
-            String domainname = (String) urls[1];
+            String domainname = (String) urls[3];
 
-            String passwd = (String) urls[2];
+            String passwd = (String) urls[1];
             imprimirln(username + "(" + domainname + ")=" + passwd);
 
             String payload = "{ \"auth\": {\"identity\": {\"methods\": [\"password\"],\"password\": {" +
@@ -406,11 +406,11 @@ public class MainActivity extends FragmentActivity {
 
                 if (rc == 201) {
                     String token = conn.getHeaderField("X-Subject-Token");
+                    usertoken=token;
 
-                    System.out.println("Token: " + token);
                     ponTextoTextView(token, R.id.textView_token);
-
-                } else {
+                 } else {
+                    usertoken="";
                     resp = "locaL: ERROR de conexión";
                     System.out.println("http response code error: " + rc + "\n");
                     ponTextoTextView("no hay token", R.id.textView_token);
@@ -859,7 +859,10 @@ public class MainActivity extends FragmentActivity {
             String leng = null;
             String resp = "none";
             imprimirln(payload);
-            if (usertoken.length() == 0) {
+
+            ToggleButton bt = (ToggleButton) findViewById(R.id.button_LOGIN);
+
+            if ((usertoken.length() == 0)||(!( (ToggleButton) findViewById(R.id.button_LOGIN)).isChecked())) {
 
                 imprimirln("acceso Directo a Orion");
 
@@ -974,7 +977,6 @@ public class MainActivity extends FragmentActivity {
             } else {
                 imprimirln("através de PEPPropxy");
 
-
                 try {
                     leng = Integer.toString(payload.getBytes("UTF-8").length);
 
@@ -995,8 +997,8 @@ public class MainActivity extends FragmentActivity {
                     conn.setRequestProperty("Content-type", HeaderContent);
                     //conn.setRequestProperty("Fiware-Service", HeaderService);
                     conn.setRequestProperty("Content-Length", leng);
-                    conn.setRequestProperty("fiware-service",userdomain);
-                    conn.setRequestProperty("fiware-servicepath", "/");
+                    conn.setRequestProperty("fiware-service",service);
+                    conn.setRequestProperty("fiware-servicepath", subservice);
                     conn.setRequestProperty("x-auth-token", usertoken);
                     conn.setDoOutput(true);
 
@@ -1631,12 +1633,18 @@ public class MainActivity extends FragmentActivity {
             String HeaderContent = "application/json";
             String payload_updateContext = "{ \"contextElements\": [" +
                     "{\"type\": \"sensoractuator\", \"isPattern\": \"false\",\"id\": \""+device_name+"\",\"attributes\": [" +
-                    "{\"name\":\""+attribute_name+"\",\"type\": \"binary\",\"value\": \"" + LED1_ST +LED2_ST +LED3_ST +LED4_ST +" \"}]}],\"updateAction\": \"UPDATE\"}";
+                    "{\"name\":\""+attribute_name+"\",\"type\": \"binary\",\"value\": \"" + LED1_ST +LED2_ST +LED3_ST +LED4_ST +" \"}]}],\"updateAction\": \"APPEND\"}";
 
             imprimirln(payload_updateContext);
 
             String leng = null;
             String resp=        "none";
+
+            ToggleButton bt = (ToggleButton) findViewById(R.id.button_LOGIN);
+
+            if ((usertoken.length() == 0)||(!( (ToggleButton) findViewById(R.id.button_LOGIN)).isChecked())) {
+
+                imprimirln("LED acceso Directo a Orion");
 
             try {
                 leng = Integer.toString(payload_updateContext.getBytes("UTF-8").length);
@@ -1708,7 +1716,83 @@ public class MainActivity extends FragmentActivity {
 
 
             return resp;
+            }
+            else
+            {
+                imprimirln("LED através de PEPPropxy");
 
+                try {
+                    leng = Integer.toString(payload_updateContext.getBytes("UTF-8").length);
+
+                    OutputStreamWriter wr = null;
+                    BufferedReader rd = null;
+                    StringBuilder sb = null;
+
+
+                    URL url = null;
+
+                    url = new URL("http://pperez-seu-or.disca.upv.es:1028/v1/updateContext");
+
+                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                    conn.setReadTimeout(10000); // miliseconds
+                    conn.setConnectTimeout(15000);
+                    conn.setRequestMethod("POST");
+
+                    conn.setRequestProperty("Accept", HeaderAccept);
+                    conn.setRequestProperty("Content-type", HeaderContent);
+                    conn.setRequestProperty("fiware-service", service);
+                    conn.setRequestProperty("fiware-servicepath",  subservice);
+                    conn.setRequestProperty("Content-Length", leng);
+                    conn.setRequestProperty("x-auth-token", usertoken);
+                    conn.setDoOutput(true);
+
+                    OutputStream os = conn.getOutputStream();
+                    os.write(payload_updateContext.getBytes("UTF-8"));
+                    os.flush();
+                    os.close();
+
+
+                    int rc = conn.getResponseCode();
+
+                    if (rc == 200) {
+
+                        resp = conn.getContentEncoding();
+                        is = conn.getInputStream();
+
+                        resp = "OK";
+                        //read the result from the server
+                        rd = new BufferedReader(new InputStreamReader(is));
+                        sb = new StringBuilder();
+
+                        String line = null;
+                        while ((line = rd.readLine()) != null)
+                        {
+                            sb.append(line + "\n");
+                        }
+                        String result = sb.toString();
+                        imprimirln("UPDATE CONTEXT: "+result);
+
+                    } else {
+                        resp = "ERROR de conexión";
+                        System.out.println("http response code error: " + rc + "\n");
+                        imprimirln("UPDATE CONTEXT: "+"http response code error: " + rc + "\n");
+
+                    }
+
+
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                } catch (ProtocolException e) {
+                    e.printStackTrace();
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+
+                return resp;
+            }
 
 
 

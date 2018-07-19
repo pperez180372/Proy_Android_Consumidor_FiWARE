@@ -65,11 +65,15 @@ public class ControlFragment extends Fragment {
         TextView tx = (TextView) view.findViewById(R.id.textView_user_name);
         tx.setText("alopez");
         tx = (TextView) view.findViewById(R.id.textView_device_name);
-        tx.setText("dispositivo al que se desea acceder");
+        tx.setText("SensorSEU27");
         tx = (TextView) view.findViewById(R.id.textView_service);
-        tx.setText("asignatura_seu_2016");
+        tx.setText("ciudad_seu_1718");
         tx = (TextView) view.findViewById(R.id.textView_subservice);
-        tx.setText("mantenimiento");
+        tx.setText("/distritonorte");
+
+        tx = (TextView) view.findViewById(R.id.textView_passwd);
+        tx.setText("alopezSEU");
+
 
         paintred = new Paint();
         paintred.setColor(Color.parseColor("#CD5C5C"));
@@ -193,8 +197,6 @@ public class ControlFragment extends Fragment {
         BotonActualiza= (Button) view.findViewById(R.id.buttonActualize);
         BotonActualiza.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-
-
 
                 String user_name = ((TextView) (view.findViewById(R.id.textView_user_name))).getText().toString();
                 String user_passwd = ((TextView) (view.findViewById(R.id.textView_passwd))).getText().toString();
